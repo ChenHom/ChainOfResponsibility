@@ -1,19 +1,21 @@
 <?php
 namespace App\Http\Middleware\Api;
 
+use App\Entities\User;
+use App\Tools\TraderDTO;
+
 class ChannelDirector
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  TraderDTO  $request
      * @param  \Closure  $next
-     * @param User $client
      * @return mixed
      */
-    public function handle($request, \Closure $next, $client = null)
+    public function handle($dto, \Closure $next)
     {
 
-        return $next($request);
+        return $next($dto);
     }
 }

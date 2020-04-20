@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentsTable extends Migration
+class CreateCashBookRecordTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreatePaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('cash_book_record', function (Blueprint $table) {
             $table->unsignedMediumInteger('id', true);
-            $table->string('name')->comment('支付名稱');
-            $table->string('slug')->comment('支付代碼');
-            $table->enum('enable', [ENABLE_ON, ENABLE_OFF, ENABLE_DELETE])
-                ->default(ENABLE_ON)->comment('狀態');
+            $table->unsignedMediumInteger('cash_book_id');
+            $table->unsignedInteger('source_id');
+            $table->enum('type', ['R', 'T']);
+            $table->decimal('original_amount', 9, 4)->default(0);
+            $table->decimal('diff_amount', 9, 4)->default(0);
             $table->timestamps();
-
-            $table->index('slug');
         });
     }
 
@@ -32,6 +31,6 @@ class CreatePaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('cash_book_record');
     }
 }

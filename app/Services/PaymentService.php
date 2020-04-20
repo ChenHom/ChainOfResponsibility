@@ -1,17 +1,17 @@
 <?php
 namespace App\Services;
 
+use App\Tools\TraderDTO;
 use Illuminate\Pipeline\Pipeline;
-use Symfony\Component\HttpFoundation\Request;
 
 class PaymentService
 {
     private $postMan;
 
-    public function process(Request $request)
+    public function process(TraderDTO $dto)
     {
         return (new Pipeline(app()))
-            ->send($request)
+            ->send($dto)
             ->through(config('trade.middleware'))
             ->then($this->sender());
     }
@@ -23,8 +23,8 @@ class PaymentService
      */
     protected function sender()
     {
-        return function ($request) {
-            return $request;
+        return function (TraderDTO $dto) {
+            return [$dto->request->toArray(), $dto->user];
         };
     }
 }

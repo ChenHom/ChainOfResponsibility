@@ -18,7 +18,8 @@ class CreateChannelsTable extends Migration
             $table->string('name')->comment('渠道名稱');
             $table->string('slug')->comment('渠道 slug');
             $table->unsignedInteger('amount_limit')->comment('每日交易限額');
-            $table->enum('enable', [ENABLE_ON, ENABLE_OFF, ENABLE_DELETE])->comment('狀態');
+            $table->enum('enable', [ENABLE_ON, ENABLE_OFF, ENABLE_DELETE])
+                ->default(ENABLE_ON)->comment('狀態');
             $table->string('remark')->nullable()->comment('備註');
             $table->timestamps();
 

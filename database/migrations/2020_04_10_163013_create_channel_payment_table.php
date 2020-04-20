@@ -15,8 +15,8 @@ class CreateChannelPaymentTable extends Migration
     {
         Schema::create('channel_payment', function (Blueprint $table) {
             $table->unsignedMediumInteger('id', true);
-            $table->unsignedMediumInteger('channels_id')->comment('渠道編號');
-            $table->unsignedMediumInteger('payments_id')->comment('交易方式編號');
+            $table->unsignedMediumInteger('channel_id')->comment('渠道編號');
+            $table->unsignedMediumInteger('payment_id')->comment('交易方式編號');
             $table->unsignedInteger('min_limit')->comment('最小限額');
             $table->unsignedInteger('max_limit')->comment('最大限額');
             $table->unsignedInteger('amount_limit')->comment('交易限額');
@@ -28,11 +28,13 @@ class CreateChannelPaymentTable extends Migration
             $table->enum('deposit_fee_type', ['F', 'C'])->comment('下發收費方式');
             $table->enum('delivery_type', ['D', 'T'])->default('D')->comment('下發類型');
             $table->unsignedTinyInteger('delivery_day')->default(0)->comment('下發天數');
-            $table->enum('enable', [ENABLE_ON, ENABLE_OFF, ENABLE_DELETE])->comment('啟用狀態');
+            $table->enum('enable', [ENABLE_ON, ENABLE_OFF, ENABLE_DELETE])
+                ->default(ENABLE_ON)->comment('啟用狀態');
             $table->string('remark')->nullable()->comment('備註');
             $table->timestamps();
 
-            $table->index('channels_id');
+            $table->index('channel_id');
+            $table->unique(['channel_id', 'payment_id']);
         });
     }
 

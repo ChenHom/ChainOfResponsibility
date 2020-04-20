@@ -2,12 +2,14 @@
 
 namespace App\Entities;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Entities\Traits\CastEnable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use CastEnable;
 
     /**
      * The attributes that are mass assignable.
@@ -34,16 +36,49 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password'
+        'password', 'secret_key'
     ];
 
-    public function userChannel()
+    /**
+     * API 交易帳號欄位
+     *
+     * @var string
+     */
+    protected $apiAccount = 'name';
+
+    public function ApiTradeAccount()
+    {
+        return $this->apiAccount;
+    }
+
+    public function userPayment()
     {
         return $this->hasMany(UserPayment::class);
     }
 
-    public function channelPayment()
+    public function cashBook()
     {
-        return $this->hasOneThrough(ChannelPayment::class, UserPayment::class);
+        return $this->hasOne(CashBook::class);
+    }
+
+    /**
+     * get sign
+     *
+     * @param array $request
+     * @return string
+     */
+    public function getSign(array $request)
+    {
+        $request['key'] = $this->secret_key;
+        ksort($request);
+
+        $str = '';
+        foreach ($request as $key => $value) {
+            if($value) {
+                $str .= "{$key}={$value}&";
+            }
+        }
+
+        return md5($str);
     }
 }

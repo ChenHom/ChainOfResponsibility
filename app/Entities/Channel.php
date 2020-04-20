@@ -2,10 +2,13 @@
 
 namespace App\Entities;
 
+use App\Entities\Traits\CastEnable;
 use Illuminate\Database\Eloquent\Model;
 
 class Channel extends Model
 {
+    use CastEnable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -15,12 +18,29 @@ class Channel extends Model
         'name', 'slug', 'amount_limit', 'enable', 'remark',
     ];
 
-    public function newPivot(\Illuminate\Database\Eloquent\Model $parent, array $attributes, $table, $exists, $using = null)
+    public function payments()
     {
-        if ($parent instanceof User) {
-            return ChannelPayment::fromAttributes($parent, $attributes, $table, $exists);
-        }
-
-        return parent::newPivot($parent, $attributes, $table, $exists);
+        return $this->hasManyThrough(
+            Payment::class,
+            ChannelPayment::class,
+            'channel_id',
+            'id',
+            'id',
+            'payment_id'
+        );
     }
+
+    public function channelPayments()
+    {
+        return $this->hasMany(ChannelPayment::class);
+    }
+
+    // public function newPivot(\Illuminate\Database\Eloquent\Model $parent, array $attributes, $table, $exists, $using = null)
+    // {
+    //     if ($parent instanceof User) {
+    //         return ChannelPayment::fromAttributes($parent, $attributes, $table, $exists);
+    //     }
+
+    //     return parent::newPivot($parent, $attributes, $table, $exists);
+    // }
 }

@@ -19,13 +19,14 @@ class CreateUsersTable extends Migration
             $table->string('alias')->comment('別名');
             $table->string('password')->comment('密碼');
             $table->enum('role', [ROLE_CO, ROLE_SA, ROLE_A, ROLE_M])->comment('階層角色');
-            $table->unsignedMediumInteger('parent_id')->nullable()->comment('父層編號');
-            $table->unsignedMediumInteger('co_id')->nullable()->comment('上層股東編號');
-            $table->unsignedMediumInteger('sa_id')->nullable()->comment('上層總代理編號');
-            $table->unsignedMediumInteger('a_id')->nullable()->comment('上層代理編號');
-            $table->unsignedInteger('amount_limit')->nullable()->comment('商戶單日限額');
-            $table->string('secret_key')->nullable()->comment('Api 密鑰');
-            $table->enum('enable', [ENABLE_ON, ENABLE_OFF, ENABLE_DELETE])->comment('啟用狀態');
+            $table->unsignedMediumInteger('parent_id')->default(0)->comment('父層編號');
+            $table->unsignedMediumInteger('co_id')->default(0)->comment('上層股東編號');
+            $table->unsignedMediumInteger('sa_id')->default(0)->comment('上層總代理編號');
+            $table->unsignedMediumInteger('a_id')->default(0)->comment('上層代理編號');
+            $table->unsignedInteger('amount_limit')->default(0)->comment('商戶單日限額');
+            $table->string('secret_key')->default('')->comment('Api 密鑰');
+            $table->enum('enable', [ENABLE_ON, ENABLE_OFF, ENABLE_DELETE])
+                ->default(ENABLE_ON)->comment('啟用狀態');
             $table->timestamps();
 
             $table->index('name');

@@ -2,11 +2,14 @@
 
 namespace App\Entities;
 
+use App\Entities\Traits\CastEnable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ChannelPayment extends Pivot
 {
+    use CastEnable;
+
     /**
      * The attributes that are mass assignable.
      *

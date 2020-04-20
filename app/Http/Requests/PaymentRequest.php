@@ -2,20 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Exceptions\PaymentException;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
 
 class PaymentRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,7 +20,16 @@ class PaymentRequest extends FormRequest
             'slug' => 'required',
             'order_id' => 'required',
             'notify_url' => 'required',
-            'amount' => 'required',
+            'amount' => 'required|integer|size:0',
         ];
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        throw (new ValidationException($validator))
+                    ->errorBag($this->errorBag);
+        // throw (new PaymentException($validator))
+        //             ->errorBag($this->errorBag);
+    }
+
 }
