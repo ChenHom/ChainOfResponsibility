@@ -2,11 +2,20 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+    use DatabaseMigrations;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed();
+    }
+
     /**
      * A basic test example.
      *

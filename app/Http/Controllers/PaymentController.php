@@ -18,6 +18,6 @@ class PaymentController extends Controller
     {
         $user = User::find(4);
         $user->userPayment->first()->load(['channel', 'payment']);
-        dd($user->toArray());
+        dump($user->toArray());
     }
 }
